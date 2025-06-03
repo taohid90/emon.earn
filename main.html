@@ -1,4 +1,4 @@
-<html lang="en">
+<html lang="bn"> <!-- ভাষা পরিবর্তন করা হলো -->
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -35,69 +35,79 @@
         background-clip: text;
         text-fill-color: transparent;
       }
-      .button-shadow-hover:hover {
-        box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.5); /* Yellow shadow on hover */
+      .button-shadow-hover:hover,
+      .button-shadow-focus:focus { /* Added focus style for shadow */
+        box-shadow: 0 10px 20px -5px rgba(245, 158, 11, 0.5); /* Yellow shadow */
       }
       .card {
         background-color: white;
-        border-radius: 12px;
+        border-radius: 12px; /* Slightly increased for better appeal on larger screens */
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         overflow: hidden; /* Important for rounded corners on tables */
       }
+      /* Custom focus ring for better visibility on TV */
+      .focusable:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.5); /* Tailwind yellow-400 with opacity */
+      }
+      .focusable-blue:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Tailwind blue-500 with opacity */
+      }
     </style>
   </head>
-  <body class="text-gray-800 min-h-screen fade-in-up">
+  <body class="text-gray-800 min-h-screen fade-in-up text-base md:text-lg">
     <header class="sticky top-0 z-50 bg-white shadow-md">
-      <div class="container mx-auto flex items-center justify-between px-4 py-4">
-        <div class="flex items-center space-x-3">
-          <img src="https://playfytv.com/wp-content/uploads/2025/05/20250522_103012_0000.png" alt="App Logo" class="w-12 h-12 rounded-full shadow-lg border-2 border-yellow-400"/>
-          <span class="text-3xl orbitron-title font-bold tracking-wider uppercase gradient-text">PLAYFy TV</span>
+      <div class="container mx-auto flex items-center justify-between px-4 md:px-6 py-4">
+        <div class="flex items-center space-x-3 md:space-x-4">
+          <img src="https://playfytv.com/wp-content/uploads/2025/05/20250522_103012_0000.png" alt="App Logo" class="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full shadow-lg border-2 border-yellow-400"/>
+          <span class="text-3xl md:text-4xl lg:text-5xl orbitron-title font-bold tracking-wider uppercase gradient-text">PLAYFy TV</span>
         </div>
       </div>
     </header>
 
-    <main class="px-4 sm:px-6 py-12 max-w-2xl mx-auto">
-      <section class="text-center mb-10">
-        <h1 class="text-4xl sm:text-5xl orbitron-title font-extrabold mb-4 gradient-text">
+    <main class="px-4 sm:px-6 md:px-8 py-12 md:py-16 lg:py-20 max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto">
+      <section class="text-center mb-10 md:mb-12 lg:mb-16">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl orbitron-title font-extrabold mb-4 lg:mb-6 gradient-text">
           Download PLAYFy TV APK
         </h1>
-        <p class="mb-8 text-gray-600 text-lg">
+        <p class="mb-8 lg:mb-10 text-gray-600 text-lg md:text-xl lg:text-2xl">
           <i class="fas fa-rocket mr-2 text-yellow-500"></i> Latest Version v1.0 - Experience Seamless Streaming!
         </p>
 
-        <div class="flex justify-center mb-10">
-          <img src="https://playfytv.com/wp-content/uploads/2025/05/20250522_103012_0000.png" alt="App Icon" class="w-36 h-36 rounded-2xl border-4 border-yellow-400 shadow-2xl transform hover:scale-105 transition-transform duration-300"/>
+        <div class="flex justify-center mb-10 md:mb-12 lg:mb-16">
+          <img src="https://playfytv.com/wp-content/uploads/2025/05/20250522_103012_0000.png" alt="App Icon" class="w-36 h-36 md:w-44 md:h-44 lg:w-56 lg:h-56 rounded-2xl border-4 border-yellow-400 shadow-2xl transform hover:scale-105 transition-transform duration-300"/>
         </div>
       </section>
 
-      <section class="mb-10 card">
-        <div class="p-6">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-5 text-center">App Details</h2>
+      <section class="mb-10 md:mb-12 lg:mb-16 card">
+        <div class="p-6 md:p-8 lg:p-10">
+            <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-700 mb-5 md:mb-6 lg:mb-8 text-center">App Details</h2>
             <table class="w-full text-left table-auto">
-              <tbody class="divide-y divide-gray-200">
+              <tbody class="divide-y divide-gray-200 text-base md:text-lg lg:text-xl">
                 <tr class="hover:bg-yellow-50/50 transition-colors duration-200">
-                  <td class="py-3 px-4 font-medium text-gray-500"><i class="fas fa-signature mr-2 text-yellow-500 w-5 text-center"></i>App Name</td>
-                  <td class="py-3 px-4 text-gray-700 font-semibold">PLAYFy TV</td>
+                  <td class="py-3 md:py-4 px-4 font-medium text-gray-500"><i class="fas fa-signature mr-2 md:mr-3 text-yellow-500 w-5 md:w-6 text-center"></i>App Name</td>
+                  <td class="py-3 md:py-4 px-4 text-gray-700 font-semibold">PLAYFy TV</td>
                 </tr>
                 <tr class="hover:bg-yellow-50/50 transition-colors duration-200">
-                  <td class="py-3 px-4 font-medium text-gray-500"><i class="fas fa-save mr-2 text-yellow-500 w-5 text-center"></i>Size</td>
-                  <td class="py-3 px-4 text-gray-700">5.7MB</td>
+                  <td class="py-3 md:py-4 px-4 font-medium text-gray-500"><i class="fas fa-save mr-2 md:mr-3 text-yellow-500 w-5 md:w-6 text-center"></i>Size</td>
+                  <td class="py-3 md:py-4 px-4 text-gray-700">5.7MB</td>
                 </tr>
                 <tr class="hover:bg-yellow-50/50 transition-colors duration-200">
-                  <td class="py-3 px-4 font-medium text-gray-500"><i class="fas fa-code-branch mr-2 text-yellow-500 w-5 text-center"></i>Current Version</td>
-                  <td class="py-3 px-4 text-gray-700">1.0</td>
+                  <td class="py-3 md:py-4 px-4 font-medium text-gray-500"><i class="fas fa-code-branch mr-2 md:mr-3 text-yellow-500 w-5 md:w-6 text-center"></i>Current Version</td>
+                  <td class="py-3 md:py-4 px-4 text-gray-700">1.0</td>
                 </tr>
                 <tr class="hover:bg-yellow-50/50 transition-colors duration-200">
-                  <td class="py-3 px-4 font-medium text-gray-500"><i class="fab fa-android mr-2 text-green-500 w-5 text-center"></i>Android Required</td>
-                  <td class="py-3 px-4 text-gray-700">5.0 or above</td>
+                  <td class="py-3 md:py-4 px-4 font-medium text-gray-500"><i class="fab fa-android mr-2 md:mr-3 text-green-500 w-5 md:w-6 text-center"></i>Android Required</td>
+                  <td class="py-3 md:py-4 px-4 text-gray-700">5.0 or above</td>
                 </tr>
                 <tr class="hover:bg-yellow-50/50 transition-colors duration-200">
-                  <td class="py-3 px-4 font-medium text-gray-500"><i class="fas fa-user-cog mr-2 text-yellow-500 w-5 text-center"></i>Developer</td>
-                  <td class="py-3 px-4 text-gray-700">Taohid Islam</td>
+                  <td class="py-3 md:py-4 px-4 font-medium text-gray-500"><i class="fas fa-user-cog mr-2 md:mr-3 text-yellow-500 w-5 md:w-6 text-center"></i>Developer</td>
+                  <td class="py-3 md:py-4 px-4 text-gray-700">Taohid Islam</td>
                 </tr>
                 <tr class="hover:bg-yellow-50/50 transition-colors duration-200">
-                  <td class="py-3 px-4 font-medium text-gray-500"><i class="fas fa-id-badge mr-2 text-yellow-500 w-5 text-center"></i>License</td>
-                  <td class="py-3 px-4 text-gray-700">Free</td>
+                  <td class="py-3 md:py-4 px-4 font-medium text-gray-500"><i class="fas fa-id-badge mr-2 md:mr-3 text-yellow-500 w-5 md:w-6 text-center"></i>License</td>
+                  <td class="py-3 md:py-4 px-4 text-gray-700">Free</td>
                 </tr>
               </tbody>
             </table>
@@ -105,35 +115,35 @@
       </section>
 
       <!-- Download Button -->
-      <div class="text-center mb-10">
+      <div class="text-center mb-10 md:mb-12 lg:mb-16">
         <a href="SPROFy TV (3).apk" download
-           class="inline-flex items-center justify-center bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-600 hover:to-yellow-700 text-white font-bold text-xl py-4 px-10 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 button-shadow-hover group">
-          <i class="fas fa-download mr-3 text-2xl group-hover:animate-bounce"></i>
+           class="inline-flex items-center justify-center bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-600 hover:to-yellow-700 text-white font-bold text-xl md:text-2xl lg:text-3xl py-4 md:py-5 lg:py-6 px-10 md:px-12 lg:px-16 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 button-shadow-hover button-shadow-focus focusable group">
+          <i class="fas fa-download mr-3 text-2xl md:text-3xl lg:text-4xl group-hover:animate-bounce group-focus:animate-bounce"></i>
           Download Now
         </a>
       </div>
 
       <!-- Download Instructions -->
-      <section class="mb-10 card">
-        <div class="bg-yellow-50 p-6 rounded-b-lg">
-            <h3 class="text-xl font-semibold text-yellow-700 mb-3 flex items-center">
-              <i class="fas fa-info-circle mr-2"></i>How to Install:
+      <section class="mb-10 md:mb-12 lg:mb-16 card">
+        <div class="bg-yellow-50 p-6 md:p-8 lg:p-10 rounded-b-lg">
+            <h3 class="text-xl md:text-2xl lg:text-3xl font-semibold text-yellow-700 mb-3 md:mb-4 flex items-center">
+              <i class="fas fa-info-circle mr-2 md:mr-3"></i>How to Install:
             </h3>
-            <ul class="space-y-2 text-gray-700">
+            <ul class="space-y-2 md:space-y-3 text-gray-700 text-base md:text-lg lg:text-xl">
               <li class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
                 <span>Click the shiny download button above.</span>
               </li>
               <li class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
                 <span>Once downloaded, tap to open the APK file.</span>
               </li>
               <li class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
                 <span>If prompted, allow installation from "Unknown Sources" in your device settings.</span>
               </li>
               <li class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
                 <span>Follow the on-screen prompts to install and enjoy PLAYFy TV!</span>
               </li>
             </ul>
@@ -141,29 +151,28 @@
       </section>
 
       <!-- Developer Info -->
-      <section class="card p-6 text-center">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-3">
-            <i class="fas fa-user-astronaut mr-2 text-yellow-500"></i>About the Developer
+      <section class="card p-6 md:p-8 lg:p-10 text-center">
+        <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-700 mb-3 md:mb-4">
+            <i class="fas fa-user-astronaut mr-2 md:mr-3 text-yellow-500"></i>About the Developer
         </h2>
-        <p class="text-gray-600 leading-relaxed mb-5">
+        <p class="text-gray-600 leading-relaxed mb-5 md:mb-6 lg:mb-8 text-base md:text-lg lg:text-xl">
           Crafted with <i class="fas fa-heart text-red-500"></i> by <strong>Taohid Islam</strong>, the creative mind behind the <strong>Ti Sports</strong> platform.
           Discover more exciting apps and stay updated by joining our community.
         </p>
 
         <!-- Telegram Button -->
         <a href="https://t.me/tisports21" target="_blank"
-           class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-medium px-6 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group">
-          <i class="fab fa-telegram-plane mr-2 text-xl group-hover:animate-pulse"></i>
+           class="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 text-white font-medium text-base md:text-lg lg:text-xl px-6 md:px-8 lg:px-10 py-3 md:py-4 lg:py-5 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 group focusable-blue">
+          <i class="fab fa-telegram-plane mr-2 md:mr-3 text-xl md:text-2xl group-hover:animate-pulse group-focus:animate-pulse"></i>
           Join Ti Sports on Telegram
         </a>
       </section>
     </main>
 
-    <footer class="text-center py-8 text-gray-500 text-sm">
+    <footer class="text-center py-8 md:py-10 lg:py-12 text-gray-500 text-sm md:text-base lg:text-lg">
       <p>© <script>document.write(new Date().getFullYear())</script> PLAYFy TV. All rights reserved.</p>
       <p>Designed with <i class="fas fa-code text-yellow-500"></i> and <i class="fas fa-mug-hot text-yellow-500"></i></p>
     </footer>
 
   </body>
-</html>
 </html>
