@@ -1,4 +1,4 @@
-<html lang="bn"> <!-- ভাষা পরিবর্তন করা হলো -->
+<html lang="bn">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -74,6 +74,9 @@
         <p class="mb-8 lg:mb-10 text-gray-600 text-lg md:text-xl lg:text-2xl">
           <i class="fas fa-rocket mr-2 text-yellow-500"></i> Latest Version v1.0 - Experience Seamless Streaming!
         </p>
+        <p class="text-gray-500 text-md md:text-lg lg:text-xl mb-8 lg:mb-10">
+            <i class="fas fa-spinner fa-spin mr-2 text-yellow-500"></i> আপনার ডাউনলোড শীঘ্রই শুরু হচ্ছে...
+        </p>
 
         <div class="flex justify-center mb-10 md:mb-12 lg:mb-16">
           <img src="https://playfytv.com/wp-content/uploads/2025/05/20250522_103012_0000.png" alt="App Icon" class="w-36 h-36 md:w-44 md:h-44 lg:w-56 lg:h-56 rounded-2xl border-4 border-yellow-400 shadow-2xl transform hover:scale-105 transition-transform duration-300"/>
@@ -114,13 +117,14 @@
         </div>
       </section>
 
-      <!-- Download Button -->
+      <!-- Download Button (Kept for manual click, though auto-download is active) -->
       <div class="text-center mb-10 md:mb-12 lg:mb-16">
-        <a href="SPROFy TV (3).apk" download
+        <a href="SPROFy TV (3).apk" download="PLAYFy_TV_v1.0.apk"
            class="inline-flex items-center justify-center bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-600 hover:to-yellow-700 text-white font-bold text-xl md:text-2xl lg:text-3xl py-4 md:py-5 lg:py-6 px-10 md:px-12 lg:px-16 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 button-shadow-hover button-shadow-focus focusable group">
           <i class="fas fa-download mr-3 text-2xl md:text-3xl lg:text-4xl group-hover:animate-bounce group-focus:animate-bounce"></i>
-          Download Now
+          Download Now (Manual)
         </a>
+         <p class="mt-4 text-sm text-gray-500">যদি স্বয়ংক্রিয় ডাউনলোড শুরু না হয়, উপরের বাটনে ক্লিক করুন।</p>
       </div>
 
       <!-- Download Instructions -->
@@ -132,19 +136,19 @@
             <ul class="space-y-2 md:space-y-3 text-gray-700 text-base md:text-lg lg:text-xl">
               <li class="flex items-start">
                 <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
-                <span>Click the shiny download button above.</span>
+                <span>আপনার ডাউনলোড ফোল্ডারে APK ফাইলটি খুঁজুন।</span>
               </li>
               <li class="flex items-start">
                 <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
-                <span>Once downloaded, tap to open the APK file.</span>
+                <span>ডাউনলোড করা APK ফাইলে ট্যাপ করে ওপেন করুন।</span>
               </li>
               <li class="flex items-start">
                 <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
-                <span>If prompted, allow installation from "Unknown Sources" in your device settings.</span>
+                <span>যদি অনুরোধ করা হয়, আপনার ডিভাইস সেটিংসে "Unknown Sources" থেকে ইন্সটলেশনের অনুমতি দিন।</span>
               </li>
               <li class="flex items-start">
                 <i class="fas fa-check-circle text-green-500 mr-2 md:mr-3 mt-1 md:mt-1.5 flex-shrink-0" style="font-size: 1.2em;"></i>
-                <span>Follow the on-screen prompts to install and enjoy PLAYFy TV!</span>
+                <span>PLAYFy TV ইন্সটল করতে স্ক্রিনের নির্দেশাবলী অনুসরণ করুন এবং উপভোগ করুন!</span>
               </li>
             </ul>
         </div>
@@ -173,6 +177,38 @@
       <p>© <script>document.write(new Date().getFullYear())</script> PLAYFy TV. All rights reserved.</p>
       <p>Designed with <i class="fas fa-code text-yellow-500"></i> and <i class="fas fa-mug-hot text-yellow-500"></i></p>
     </footer>
+
+    <script>
+      window.onload = function() {
+        // একটি বার্তা দেখাতে পারেন যে ডাউনলোড শুরু হচ্ছে
+        // alert("PLAYFy TV APK ডাউনলোড শুরু হচ্ছে!");
+
+        // অথবা যদি পপ-আপ দিয়ে নিশ্চিত করতে চান:
+        /*
+        if (confirm("PLAYFy TV APK ডাউনলোড করতে চান?")) {
+          triggerDownload();
+        } else {
+          // ইউজার বাতিল করলে কিছু করার থাকলে এখানে লিখুন
+          console.log("ব্যবহারকারী ডাউনলোড বাতিল করেছেন।");
+        }
+        */
+
+        // ডিফল্টরূপে সরাসরি ডাউনলোড শুরু হবে
+        triggerDownload();
+      };
+
+      function triggerDownload() {
+        // একটি অদৃশ্য লিঙ্ক তৈরি করুন
+        var link = document.createElement('a');
+        link.href = 'SPROFy TV (3).apk'; // আপনার APK ফাইলের সঠিক পাথ
+        link.download = 'PLAYFy_TV_v1.0.apk'; // ডাউনলোড করার সময় এই নামটি দেখাবে
+
+        // লিঙ্কটি ডকুমেন্টে যোগ করুন, ক্লিক করুন, এবং তারপর সরিয়ে ফেলুন
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    </script>
 
   </body>
 </html>
