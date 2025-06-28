@@ -5,34 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Pro App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #6a5af9; --primary-light: #f3f1ff;
+            --primary: #6a5af9; --primary-dark: #5a48e3; --primary-light: #f3f1ff;
             --secondary: #121212; --light-gray: #f1f3f6;
             --text-dark: #333; --text-light: #777;
-            --white: #ffffff; --danger: #f76c6c;
+            --white: #ffffff; --danger: #f76c6c; --success: #28a745;
         }
-
         body { background-color: var(--light-gray); font-family: 'Poppins', sans-serif; color: var(--text-dark); }
 
-        #global-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        /* --- Global Components --- */
+        #global-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.3s; }
         .spinner { width: 56px; height: 56px; border-radius: 50%; border: 8px solid #f3f3f3; border-top: 8px solid var(--primary); animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); padding: 1rem; }
-        .auth-form { background: var(--white); padding: 2.5rem; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 100%; max-width: 400px; animation: fadeIn 0.5s ease; }
-        .auth-form h3 { font-weight: 700; color: var(--secondary); }
-        .form-control { border-radius: 10px; padding: 12px 15px; border: 1px solid #ddd; }
-        .btn-main { background: var(--primary); color: var(--white); border-radius: 10px; padding: 12px; font-weight: 600; transition: all 0.3s ease; }
-        .btn-main:hover { background: #5a48e3; transform: translateY(-2px); }
+        .toast-notification { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 10px; color: var(--white); font-weight: 500; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 10000; opacity: 0; transform: translateY(-20px); transition: all 0.4s ease; }
+        .toast-notification.show { opacity: 1; transform: translateY(0); }
+        .toast-notification.success { background-color: var(--success); }
+        .toast-notification.error { background-color: var(--danger); }
 
-        .app-header { background: var(--white); color: var(--secondary); padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .app-header .brand { font-weight: 700; font-size: 1.5rem; }
+        .modal-content { border-radius: 20px !important; border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .modal-header, .modal-footer { border: none !important; }
+        .btn-main { background: var(--primary); color: var(--white); border-radius: 10px; padding: 12px; font-weight: 600; transition: all 0.3s ease; }
+        .btn-main:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        /* --- Auth Page --- */
+        .auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); padding: 1rem; }
+        .auth-form-wrapper { background: var(--white); padding: 2rem 2.5rem; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.12); width: 100%; max-width: 420px; text-align: center; animation: fadeIn 0.5s ease; }
+        .auth-form-wrapper .logo { color: var(--primary); font-size: 3rem; margin-bottom: 1rem; }
+        .auth-form-wrapper h3 { font-weight: 700; color: var(--secondary); }
+        .auth-form-wrapper .form-control { border-radius: 12px; padding: 14px 18px; border: 1px solid #ddd; background-color: var(--light-gray); }
+        .auth-form-wrapper .form-control:focus { background-color: var(--white); box-shadow: 0 0 0 0.25rem var(--primary-light); border-color: var(--primary); }
+        .auth-form-wrapper .link-switch { color: var(--primary); font-weight: 600; }
+
+        /* --- Main App Layout --- */
+        .app-header { background: var(--white); color: var(--secondary); padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 1020; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .app-header .brand { font-weight: 700; font-size: 1.5rem; color: var(--primary); }
+        .app-header .header-icon { font-size: 1.5rem; color: var(--text-dark); }
 
         .main-content { padding: 20px 15px 100px 15px; }
         .view { display: none; }
@@ -40,85 +54,154 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--white); box-shadow: 0 -5px 20px rgba(0,0,0,0.08); display: flex; justify-content: space-around; padding: 10px 0; border-top-left-radius: 25px; border-top-right-radius: 25px; }
-        .bottom-nav-link { color: var(--text-light); text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 500; transition: all 0.3s ease; }
+        /* --- Bottom Navigation --- */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--white); box-shadow: 0 -5px 20px rgba(0,0,0,0.08); display: flex; justify-content: space-around; padding: 10px 0; border-top-left-radius: 25px; border-top-right-radius: 25px; z-index: 1010; }
+        .bottom-nav-link { flex: 1; color: var(--text-light); text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 500; transition: all 0.3s ease; }
         .bottom-nav-link i { font-size: 1.5rem; margin-bottom: 2px; }
         .bottom-nav-link.active { color: var(--primary); transform: translateY(-5px); }
         
-        .card-style { background: var(--white); padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .balance-card { background: linear-gradient(45deg, var(--primary), #897bfc); color: var(--white); }
-        .balance-card h4 { font-size: 1rem; opacity: 0.8; }
-        .balance-card .balance-amount { font-size: 2.5rem; font-weight: 700; }
+        /* --- Side Navigation (Offcanvas) --- */
+        .offcanvas-header { border-bottom: 1px solid var(--light-gray); }
+        .offcanvas-title { color: var(--primary); font-weight: 700; }
+        .contact-list a { display: block; padding: 1rem 1.5rem; text-decoration: none; color: var(--text-dark); font-weight: 500; border-radius: 12px; transition: background-color 0.2s, color 0.2s; }
+        .contact-list a:hover { background-color: var(--primary-light); color: var(--primary); }
+        .contact-list a i { font-size: 1.4rem; margin-right: 1rem; width: 30px; }
+
+        .card-style { background: var(--white); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .section-title { font-weight: 700; margin-top: 1.5rem; margin-bottom: 1rem; }
+
+        /* --- Home View --- */
+        #home-slider .carousel-item img { height: 200px; object-fit: cover; border-radius: 15px; }
+        #home-slider .carousel-caption { background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%); border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; }
+        .service-card { background: var(--white); border-radius: 15px; padding: 1.5rem; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; margin-bottom: 1rem; }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(106,90,249,0.15); }
+        .service-card .icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.8rem; }
+        .service-card h5 { font-weight: 600; }
+        .service-card p { font-size: 0.9rem; color: var(--text-light); }
         
-        .thumbnail-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: transform 0.3s ease; }
-        .thumbnail-card:hover { transform: translateY(-5px); }
-        .thumbnail-card img { width: 100%; height: 140px; object-fit: cover; }
-        .thumbnail-card p { padding: 12px; margin: 0; font-weight: 600; }
-        
-        .profile-actions .btn { display: flex; align-items: center; padding: 1rem; margin-bottom: 0.8rem; border: none; background: var(--primary-light); color: var(--secondary); font-weight: 600; border-radius: 12px; }
+        /* --- Profile View --- */
+        .profile-card { background: var(--white); padding: 1.5rem; border-radius: 20px; text-align: center; margin-bottom: 1.5rem; box-shadow: 0 8px 25px rgba(0,0,0,0.07); }
+        .profile-avatar { width: 90px; height: 90px; border-radius: 50%; border: 4px solid var(--primary); object-fit: cover; margin-bottom: 1rem; }
+        .profile-name { font-weight: 700; font-size: 1.4rem; margin: 0; }
+        .profile-email { color: var(--text-light); margin-bottom: 1rem; }
+        .verification-status { padding: 0.3rem 0.8rem; border-radius: 50px; font-weight: 600; font-size: 0.8rem; }
+        .verification-status.verified { background-color: var(--primary-light); color: var(--primary); }
+        .verification-status.not-verified { background-color: #fff1f1; color: var(--danger); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .stat-item { background: var(--light-gray); padding: 1rem; border-radius: 12px; }
+        .stat-item .label { font-size: 0.8rem; color: var(--text-light); }
+        .stat-item .value { font-weight: 700; font-size: 1.2rem; }
+        .profile-actions .btn { display: flex; align-items: center; justify-content: start; text-align: left; padding: 1rem; margin-bottom: 0.8rem; border: none; background: var(--white); color: var(--secondary); font-weight: 600; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .profile-actions .btn i { font-size: 1.2rem; margin-right: 1rem; color: var(--primary); width: 25px; text-align: center; }
         .profile-actions .btn-danger { background: #fff1f1; color: var(--danger); }
         .profile-actions .btn-danger i { color: var(--danger); }
+
+        /* --- Wallet View --- */
+        .balance-card { background: linear-gradient(45deg, var(--primary), var(--primary-dark)); color: var(--white); padding: 2rem; border-radius: 20px; text-align: center; margin-bottom: 1.5rem; }
+        .balance-card .label { font-size: 1rem; opacity: 0.8; }
+        .balance-card .amount { font-size: 2.5rem; font-weight: 700; letter-spacing: 1px; }
+
+        /* --- Verification Modal --- */
+        .payment-methods { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .payment-method { padding: 0.5rem; border: 2px solid var(--light-gray); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .payment-method img { width: 80px; height: 40px; object-fit: contain; }
+        .payment-method.active { border-color: var(--primary); background-color: var(--primary-light); }
+        #payment-info { background: var(--light-gray); padding: 1rem; border-radius: 12px; text-align: center; }
+        #payment-number { font-size: 1.2rem; font-weight: 600; color: var(--primary); }
+        #copy-payment-number { margin-left: 10px; }
         
-        .feature-locked { position: relative; }
-        .feature-locked::after { content: 'Verify to Unlock'; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.85); color: var(--primary); font-weight: 700; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); border-radius: 15px; cursor: pointer; }
-
-        .toast-notification { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 10px; color: var(--white); font-weight: 500; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 10000; opacity: 0; transform: translateY(-20px); transition: all 0.4s ease; }
-        .toast-notification.show { opacity: 1; transform: translateY(0); }
-        .toast-notification.success { background-color: #28a745; }
-        .toast-notification.error { background-color: var(--danger); }
-
-        .modal-content { border-radius: 20px !important; border: none !important; }
-        .modal-header, .modal-footer { border: none !important; }
-
+        /* --- Feature Locking --- UPDATED */
+        .feature-locked { position: relative; cursor: pointer; }
+        .feature-locked::after {
+            content: '\f023 Verify to Unlock';
+            font-family: 'Font Awesome 6 Free', 'Poppins', sans-serif;
+            font-weight: 900;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(241, 243, 246, 0.97); /* Use light gray background with more opacity */
+            color: var(--primary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px); /* Stronger blur */
+            border-radius: 15px;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
+    <!-- Global Loader -->
     <div id="global-loader"><div class="spinner"></div></div>
+    <!-- Toast Notification -->
     <div id="toast-notification" class="toast-notification"></div>
 
+    <!-- Auth Container -->
     <div class="auth-container" id="auth-container" style="display: none;">
-        <div class="auth-form">
+        <div class="auth-form-wrapper">
+            <i class="fas fa-bolt logo"></i>
+            <!-- Login View -->
             <div id="login-view">
-                <h3 class="text-center mb-4">Welcome Back</h3>
+                <h3 class="mb-2">Welcome Back!</h3>
+                <p class="text-muted mb-4">Login to continue your journey.</p>
                 <form id="login-form">
-                    <div class="mb-3"><input type="email" class="form-control" id="login-email" placeholder="Email" required></div>
+                    <div class="mb-3"><input type="email" class="form-control" id="login-email" placeholder="Email Address" required></div>
                     <div class="mb-3"><input type="password" class="form-control" id="login-password" placeholder="Password" required></div>
-                    <button type="submit" class="btn btn-main w-100">Login</button>
+                    <button type="submit" class="btn btn-main w-100 mt-2">Login</button>
                 </form>
-                <p class="mt-3 text-center">No account? <a href="#" id="show-signup" class="fw-bold text-decoration-none">Sign Up</a></p>
+                <p class="mt-4 text-center">No account yet? <a href="#" id="show-signup" class="link-switch text-decoration-none">Sign Up</a></p>
             </div>
+            <!-- Signup View -->
             <div id="signup-view" style="display: none;">
-                <h3 class="text-center mb-4">Create Account</h3>
+                <h3 class="mb-2">Create Your Account</h3>
+                <p class="text-muted mb-4">It's free and easy!</p>
                 <form id="signup-form">
                     <div class="mb-3"><input type="text" class="form-control" id="signup-name" placeholder="Full Name" required></div>
-                    <div class="mb-3"><input type="email" class="form-control" id="signup-email" placeholder="Email" required></div>
-                    <div class="mb-3"><input type="password" class="form-control" id="signup-password" placeholder="Password" required></div>
-                    <button type="submit" class="btn btn-main w-100">Sign Up</button>
+                    <div class="mb-3"><input type="email" class="form-control" id="signup-email" placeholder="Email Address" required></div>
+                    <div class="mb-3"><input type="password" class="form-control" id="signup-password" placeholder="Create Password" required></div>
+                    <button type="submit" class="btn btn-main w-100 mt-2">Sign Up</button>
                 </form>
-                <p class="mt-3 text-center">Have an account? <a href="#" id="show-login" class="fw-bold text-decoration-none">Login</a></p>
+                <p class="mt-4 text-center">Already have an account? <a href="#" id="show-login" class="link-switch text-decoration-none">Login</a></p>
             </div>
         </div>
     </div>
 
+    <!-- Main App Container -->
     <div id="app-container" style="display: none;">
+        <!-- App Header -->
         <header class="app-header d-flex justify-content-between align-items-center">
-            <span class="brand">Test - Emon</span>
-            <a href="#" class="text-secondary fs-4"><i class="fas fa-bell"></i></a>
+            <button class="btn border-0 p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu">
+                <i class="fas fa-bars header-icon"></i>
+            </button>
+            <span class="brand">SamrtEm Earn</span>
+            <a href="#" class="text-secondary fs-4 header-icon"><i class="fas fa-bell"></i></a>
         </header>
 
+        <!-- Main Content Area -->
         <main class="main-content">
-            <div id="home-view" class="view"><div class="row g-3" id="home-content-grid"></div></div>
+            <!-- Home View -->
+            <div id="home-view" class="view">
+                <div id="home-slider" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner" id="slider-items-container"></div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#home-slider" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#home-slider" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+                </div>
+                <h3 class="section-title">Our Services</h3>
+                <div id="services-container" class="row"></div>
+            </div>
+
+            <!-- Referral View -->
             <div id="referral-view" class="view">
                 <div class="card-style" id="referral-section">
-                    <h4>Your Code</h4>
+                    <h4 class="fw-bold">Your Referral Code</h4>
+                    <p class="text-muted small">Share your code with friends. When they verify, you both earn rewards!</p>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" id="user-referral-code" readonly>
-                        <button class="btn btn-primary" type="button" id="copy-referral-btn"><i class="fas fa-copy"></i></button>
+                        <input type="text" class="form-control" id="user-referral-code" value="LOADING..." readonly>
+                        <button class="btn btn-primary" type="button" id="copy-referral-btn"><i class="fas fa-copy"></i> Copy</button>
                     </div>
                     <hr>
-                    <h4>Use a Code</h4>
-                    <p class="text-muted small">Enter a friend's code to get ৳50 bonus!</p>
+                    <h4 class="fw-bold mt-4">Use a Friend's Code</h4>
+                    <p class="text-muted small">Enter a friend's code to get a ৳50 bonus!</p>
                     <form id="referral-submit-form">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Enter code here" id="referral-code-input" required>
@@ -127,36 +210,156 @@
                     </form>
                 </div>
             </div>
-            <div id="profile-view" class="view">
-                <div id="verification-notice" class="alert alert-warning text-center" style="display: none;">
-                    Account not verified. <a href="#" data-bs-toggle="modal" data-bs-target="#verifyModal" class="fw-bold">Verify Now!</a>
-                </div>
-                <div class="card-style balance-card text-center mb-4">
-                    <h4>Current Balance</h4>
-                    <p id="user-balance" class="balance-amount">৳0.00</p>
+
+            <!-- Wallet View -- NEW -->
+            <div id="wallet-view" class="view">
+                <div class="balance-card">
+                    <div class="label">Current Balance</div>
+                    <div id="wallet-balance-amount" class="amount">৳0.00</div>
                 </div>
                 <div class="card-style">
-                    <h6>Account Info</h6>
-                    <p class="mb-1 small"><strong>Name:</strong> <span id="user-name-display"></span></p>
-                    <p class="small m-0"><strong>Email:</strong> <span id="user-email-display"></span></p>
+                    <h4 class="fw-bold mb-3">Withdraw Funds</h4>
+                    <p class="text-muted small mb-3">Minimum withdrawal amount is ৳100. Verification is required.</p>
+                    <form id="withdraw-form">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Method</label>
+                            <select class="form-select" id="withdraw-method" required>
+                                <option value="bKash">bKash</option>
+                                <option value="Nagad">Nagad</option>
+                                <option value="Rocket">Rocket</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Account Number</label>
+                            <input type="text" class="form-control" id="withdraw-number" placeholder="e.g., 017..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Amount (BDT)</label>
+                            <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount" min="100" required>
+                        </div>
+                        <button type="submit" class="btn btn-main w-100 mt-2">Request Withdrawal</button>
+                    </form>
                 </div>
-                <div class="card-style profile-actions">
-                    <button class="btn" id="micro-jobs-btn"><i class="fas fa-tasks"></i> Micro Jobs</button>
-                    <button class="btn" id="withdraw-btn" data-bs-toggle="modal" data-bs-target="#withdrawModal"><i class="fas fa-hand-holding-usd"></i> Withdraw Funds</button>
+            </div>
+
+            <!-- Profile View -->
+            <div id="profile-view" class="view">
+                <div class="profile-card">
+                    <img src="https://i.pravatar.cc/150" id="profile-avatar-img" class="profile-avatar">
+                    <h4 id="profile-name-display" class="profile-name">User Name</h4>
+                    <p id="profile-email-display" class="profile-email">user@example.com</p>
+                    <span id="verification-status-badge" class="verification-status">Status</span>
+                </div>
+
+                <div class="stats-grid mb-4">
+                    <div class="stat-item text-center">
+                        <div class="label">Current Balance</div>
+                        <div id="user-balance" class="value text-success">৳0.00</div>
+                    </div>
+                    <div class="stat-item text-center">
+                        <div class="label">Joined On</div>
+                        <div id="user-join-date" class="value">Jan 1, 2024</div>
+                    </div>
+                </div>
+
+                <!-- Profile Referral Code Display -- NEW -->
+                <div class="card-style">
+                    <h5 class="fw-bold">My Referral Code</h5>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="profile-referral-code-display" value="LOADING..." readonly>
+                        <button class="btn btn-outline-primary" type="button" id="copy-profile-referral-btn"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn" data-bs-toggle="modal" data-bs-target="#verifyModal"><i class="fas fa-check-circle"></i> Account Verification</button>
+                    <button class="btn" id="go-to-wallet-btn"><i class="fas fa-wallet"></i> Withdraw Funds</button> <!-- UPDATED -->
                     <button class="btn btn-danger" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
             </div>
         </main>
         
+        <!-- Bottom Navigation -- UPDATED -->
         <nav class="bottom-nav">
             <a href="#" class="bottom-nav-link active" data-view="home-view"><i class="fas fa-home"></i><span>Home</span></a>
             <a href="#" class="bottom-nav-link" data-view="referral-view"><i class="fas fa-user-friends"></i><span>Referral</span></a>
+            <a href="#" class="bottom-nav-link" data-view="wallet-view"><i class="fas fa-wallet"></i><span>Wallet</span></a>
             <a href="#" class="bottom-nav-link" data-view="profile-view"><i class="fas fa-user"></i><span>Profile</span></a>
         </nav>
     </div>
 
-    <div class="modal fade" id="verifyModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content p-2"><div class="modal-header"><h5 class="modal-title fw-bold">Account Verification</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>Send <strong>৳50</strong> to bKash: <strong class="text-primary">01XXXXXXXXX</strong></p><form id="verify-form"><div class="mb-3"><input type="text" class="form-control" id="transaction-id" placeholder="Transaction ID" required></div><button type="submit" class="btn btn-main w-100">Submit for Verification</button></form></div></div></div></div>
-    <div class="modal fade" id="withdrawModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content p-2"><div class="modal-header"><h5 class="modal-title fw-bold">Withdraw Funds</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>Balance: <strong id="withdraw-balance-display">৳0.00</strong></p><p class="text-muted small">Min. withdrawal: ৳100.</p><form id="withdraw-form"><div class="mb-3"><select class="form-select" id="withdraw-method" required><option value="bKash">bKash</option><option value="Nagad">Nagad</option></select></div><div class="mb-3"><input type="text" class="form-control" id="withdraw-number" placeholder="Account Number" required></div><div class="mb-3"><input type="number" class="form-control" id="withdraw-amount" placeholder="Amount (BDT)" min="100" required></div><button type="submit" class="btn btn-main w-100">Request Withdrawal</button></form></div></div></div></div>
+    <!-- Modals -->
+    <!-- Onboarding Popup Modal -->
+    <div class="modal fade" id="onboardingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="onboarding-title">Welcome to Our App!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <img src="https://via.placeholder.com/400x200" id="onboarding-image" class="img-fluid w-100">
+                    <div class="p-3">
+                        <p id="onboarding-description">Here is a quick guide to get you started. Watch this video for more details.</p>
+                        <a href="#" id="onboarding-link" target="_blank" class="btn btn-main w-100">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Verification Modal -->
+    <div class="modal fade" id="verifyModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-2">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Account Verification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center text-muted">Select a payment method to verify.</p>
+                    <div class="payment-methods">
+                        <div class="payment-method active" data-method="bKash" data-number="01XXXXXXXXX">
+                            <img src="https://i.ibb.co/c2StCqC/bkash.png" alt="bKash">
+                        </div>
+                        <div class="payment-method" data-method="Nagad" data-number="01YYYYYYYYY">
+                            <img src="https://i.ibb.co/pwnL1w2/nagad.png" alt="Nagad">
+                        </div>
+                        <div class="payment-method" data-method="Rocket" data-number="01ZZZZZZZZZ">
+                           <img src="https://i.ibb.co/3Wf2z7s/rocket.png" alt="Rocket">
+                        </div>
+                    </div>
+                    <div id="payment-info" class="mb-3">
+                        <p class="mb-1 small">Send <strong>৳50</strong> to this <strong id="payment-method-name">bKash</strong> number:</p>
+                        <span id="payment-number">01XXXXXXXXX</span>
+                        <button class="btn btn-sm btn-outline-primary" id="copy-payment-number"><i class="fas fa-copy"></i></button>
+                    </div>
+                    <form id="verify-form">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="transaction-id" placeholder="Enter Transaction ID" required>
+                        </div>
+                        <button type="submit" class="btn btn-main w-100">Submit for Verification</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Side Menu (Offcanvas) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sideMenu">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Contact Us</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            <div class="contact-list">
+                <a href="https://t.me/your_telegram" target="_blank"><i class="fab fa-telegram-plane text-info"></i> Telegram</a>
+                <a href="https://wa.me/your_whatsapp_number" target="_blank"><i class="fab fa-whatsapp text-success"></i> WhatsApp</a>
+                <a href="https://facebook.com/your_page" target="_blank"><i class="fab fa-facebook text-primary"></i> Facebook</a>
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module">
@@ -164,14 +367,22 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getDatabase, ref, set, get, onValue, update, push, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+        // --- Firebase Config (use your own) ---
         const firebaseConfig = { apiKey: "AIzaSyAb8YsPMOY53GxiycCL6G0MPZdgWe3nnyY", authDomain: "movie-92659.firebaseapp.com", databaseURL: "https://movie-92659-default-rtdb.firebaseio.com", projectId: "movie-92659", storageBucket: "movie-92659.firebasestorage.app", messagingSenderId: "1090734362509", appId: "1:1090734362509:web:86be5583f6e8fcfdfa77c4", measurementId: "G-XF1TEP0DSJ" };
         
+        // --- App Initialization ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
         let currentUserData = null;
+        let onboardingModal = null;
 
+        // --- DOM Elements ---
         const loader = document.getElementById('global-loader');
+        const authContainer = document.getElementById('auth-container');
+        const appContainer = document.getElementById('app-container');
+
+        // --- Utility Functions ---
         const showToast = (message, type = 'success') => {
             const toast = document.getElementById('toast-notification');
             toast.textContent = message;
@@ -181,12 +392,14 @@
 
         const showView = (viewId) => {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            document.getElementById(viewId)?.classList.add('active');
             document.querySelectorAll('.bottom-nav-link').forEach(l => {
                 l.classList.toggle('active', l.dataset.view === viewId);
             });
+            window.scrollTo(0, 0); // Scroll to top on view change
         };
-        
+
+        // --- Authentication Logic ---
         onAuthStateChanged(auth, user => {
             if (user) {
                 const userRef = ref(db, 'users/' + user.uid);
@@ -194,17 +407,23 @@
                     if (snapshot.exists()) {
                         currentUserData = { uid: user.uid, ...snapshot.val() };
                         updateUI(currentUserData);
+                        checkOnboarding();
                     }
-                    document.getElementById('auth-container').style.display = 'none';
-                    document.getElementById('app-container').style.display = 'block';
-                    showView('home-view');
-                    loader.style.display = 'none';
+                    authContainer.style.display = 'none';
+                    appContainer.style.display = 'block';
+                    if (!document.querySelector('.view.active')) {
+                        showView('home-view');
+                    }
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 300);
                 });
                 loadHomeContent();
             } else {
-                document.getElementById('auth-container').style.display = 'flex';
-                document.getElementById('app-container').style.display = 'none';
-                loader.style.display = 'none';
+                currentUserData = null;
+                authContainer.style.display = 'flex';
+                appContainer.style.display = 'none';
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 300);
             }
         });
 
@@ -218,6 +437,7 @@
                 const code = name.split(' ')[0].toUpperCase() + Math.random().toString(36).substr(2, 4).toUpperCase();
                 await set(ref(db, 'users/' + cred.user.uid), { name, email, balance: 0, isVerified: false, referralCode: code, createdAt: serverTimestamp() });
                 await set(ref(db, `referralCodes/${code}`), { userId: cred.user.uid });
+                localStorage.setItem('onboardingShown', 'false'); // Show onboarding for new users
             } catch (error) { showToast(error.message, 'error'); }
         });
 
@@ -227,87 +447,180 @@
             .catch(error => showToast(error.message, 'error'));
         });
 
-        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth).then(() => showToast('Logged out successfully.')));
         document.getElementById('show-signup').addEventListener('click', e => { e.preventDefault(); document.getElementById('login-view').style.display = 'none'; document.getElementById('signup-view').style.display = 'block'; });
         document.getElementById('show-login').addEventListener('click', e => { e.preventDefault(); document.getElementById('signup-view').style.display = 'none'; document.getElementById('login-view').style.display = 'block'; });
 
+        // --- UI Update Function ---
         function updateUI(data) {
-            document.getElementById('user-name-display').textContent = data.name;
-            document.getElementById('user-email-display').textContent = data.email;
-            document.getElementById('user-balance').textContent = `৳${(data.balance || 0).toFixed(2)}`;
-            document.getElementById('withdraw-balance-display').textContent = `৳${(data.balance || 0).toFixed(2)}`;
-            document.getElementById('user-referral-code').value = data.referralCode;
+            const balance = `৳${(data.balance || 0).toFixed(2)}`;
+            const referralCode = data.referralCode || 'N/A';
 
-            const notice = document.getElementById('verification-notice');
-            const referralSection = document.getElementById('referral-section');
+            // Profile View
+            document.getElementById('profile-name-display').textContent = data.name;
+            document.getElementById('profile-email-display').textContent = data.email;
+            document.getElementById('user-balance').textContent = balance;
+            document.getElementById('profile-referral-code-display').value = referralCode;
+            const joinDate = data.createdAt ? new Date(data.createdAt).toLocaleDateString() : 'N/A';
+            document.getElementById('user-join-date').textContent = joinDate;
+
+            // Wallet View
+            document.getElementById('wallet-balance-amount').textContent = balance;
+
+            const statusBadge = document.getElementById('verification-status-badge');
             if (data.isVerified) {
-                notice.style.display = 'none';
-                referralSection.classList.remove('feature-locked');
+                statusBadge.textContent = 'Verified';
+                statusBadge.className = 'verification-status verified';
             } else {
-                notice.style.display = 'block';
+                statusBadge.textContent = 'Not Verified';
+                statusBadge.className = 'verification-status not-verified';
+            }
+
+            // Referral View
+            document.getElementById('user-referral-code').value = referralCode;
+            const referralSection = document.getElementById('referral-section');
+            const walletView = document.getElementById('wallet-view');
+            
+            if (data.isVerified) {
+                referralSection.classList.remove('feature-locked');
+                walletView.classList.remove('feature-locked');
+            } else {
                 referralSection.classList.add('feature-locked');
+                walletView.classList.add('feature-locked');
+            }
+        }
+        
+        // --- Onboarding Popup Logic ---
+        function checkOnboarding() {
+            if (localStorage.getItem('onboardingShown') !== 'true') {
+                onValue(ref(db, 'onboardingPopup'), (snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        document.getElementById('onboarding-title').textContent = data.title;
+                        document.getElementById('onboarding-image').src = data.imageUrl;
+                        document.getElementById('onboarding-description').textContent = data.description;
+                        document.getElementById('onboarding-link').href = data.videoUrl;
+                        if (!onboardingModal) onboardingModal = new bootstrap.Modal(document.getElementById('onboardingModal'));
+                        onboardingModal.show();
+                        document.getElementById('onboardingModal').addEventListener('hidden.bs.modal', () => {
+                            localStorage.setItem('onboardingShown', 'true');
+                        }, { once: true });
+                    }
+                }, { once: true });
             }
         }
 
-        document.querySelectorAll('.bottom-nav-link').forEach(link => {
-            link.addEventListener('click', (e) => { e.preventDefault(); showView(link.dataset.view); });
-        });
-
+        // --- Content Loading ---
         function loadHomeContent() {
-            onValue(ref(db, 'homeContent'), (snapshot) => {
-                const grid = document.getElementById('home-content-grid');
-                grid.innerHTML = '';
+            onValue(ref(db, 'homeSlider'), (snapshot) => {
+                const container = document.getElementById('slider-items-container');
+                container.innerHTML = '';
+                if(snapshot.exists()) {
+                    let first = true;
+                    snapshot.forEach(child => {
+                        const item = child.val();
+                        container.innerHTML += `<div class="carousel-item ${first ? 'active' : ''}"><img src="${item.imageUrl}" class="d-block w-100" alt="..."><div class="carousel-caption d-none d-md-block"><h5>${item.title}</h5></div></div>`;
+                        first = false;
+                    });
+                }
+            });
+            onValue(ref(db, 'services'), (snapshot) => {
+                const container = document.getElementById('services-container');
+                container.innerHTML = '';
                 if(snapshot.exists()) {
                     snapshot.forEach(child => {
-                        const c = child.val();
-                        grid.innerHTML += `<div class="col-6"><a href="${c.targetUrl}" target="_blank" class="text-decoration-none text-dark"><div class="thumbnail-card"><img src="${c.imageUrl}"><p>${c.title}</p></div></a></div>`;
+                        const item = child.val();
+                        container.innerHTML += `<div class="col-6"><div class="service-card"><i class="${item.icon} icon"></i><h5>${item.title}</h5><p>${item.description}</p></div></div>`;
                     });
-                } else { grid.innerHTML = '<p>No content available.</p>'; }
+                }
             });
         }
         
+        // --- Event Listeners ---
+        document.querySelectorAll('.bottom-nav-link').forEach(link => {
+            link.addEventListener('click', (e) => { e.preventDefault(); showView(link.dataset.view); });
+        });
+        
+        // Go to wallet button on profile
+        document.getElementById('go-to-wallet-btn').addEventListener('click', () => {
+             showView('wallet-view');
+        });
+
+        // Add event listener to locked features to show verify modal
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('.feature-locked') || e.target.closest('.feature-locked')) {
+                if (!currentUserData.isVerified) {
+                    const verifyModal = new bootstrap.Modal(document.getElementById('verifyModal'));
+                    verifyModal.show();
+                }
+            }
+        });
+
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', () => {
+                document.querySelector('.payment-method.active').classList.remove('active');
+                method.classList.add('active');
+                document.getElementById('payment-method-name').textContent = method.dataset.method;
+                document.getElementById('payment-number').textContent = method.dataset.number;
+            });
+        });
+
+        document.getElementById('copy-payment-number').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('payment-number').textContent).then(() => showToast('Number copied!'));
+        });
+
         document.getElementById('verify-form').addEventListener('submit', async e => {
             e.preventDefault();
             const trxId = document.getElementById('transaction-id').value;
+            const selectedMethod = document.querySelector('.payment-method.active').dataset.method;
+            if (!trxId) { showToast('Please enter the Transaction ID.', 'error'); return; }
             try {
-                await push(ref(db, 'verificationRequests'), { userId: currentUserData.uid, userName: currentUserData.name, transactionId: trxId, status: 'pending', timestamp: serverTimestamp() });
-                showToast('Verification request submitted!');
+                await push(ref(db, 'verificationRequests'), { userId: currentUserData.uid, userName: currentUserData.name, transactionId: trxId, method: selectedMethod, status: 'pending', timestamp: serverTimestamp() });
+                showToast('Verification request submitted successfully!');
                 bootstrap.Modal.getInstance(document.getElementById('verifyModal')).hide();
                 e.target.reset();
             } catch (error) { showToast(error.message, 'error'); }
         });
 
-        document.getElementById('copy-referral-btn').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('user-referral-code').value).then(() => showToast('Code copied!')); });
+        document.getElementById('copy-referral-btn').addEventListener('click', () => { 
+            navigator.clipboard.writeText(document.getElementById('user-referral-code').value).then(() => showToast('Referral code copied!')); 
+        });
+        document.getElementById('copy-profile-referral-btn').addEventListener('click', () => { 
+            navigator.clipboard.writeText(document.getElementById('profile-referral-code-display').value).then(() => showToast('Referral code copied!')); 
+        });
         
         document.getElementById('referral-submit-form').addEventListener('submit', async e => {
             e.preventDefault();
-            if (!currentUserData.isVerified) { showToast('Please verify your account first.', 'error'); return; }
+            if (!currentUserData.isVerified) { showToast('Please verify your account to use a referral code.', 'error'); return; }
             if (currentUserData.referredBy) { showToast('You have already used a referral code.', 'error'); return; }
             const code = document.getElementById('referral-code-input').value.trim().toUpperCase();
-            if (code === currentUserData.referralCode) { showToast("You can't use your own code.", 'error'); return; }
+            if (!code) { showToast('Please enter a referral code.', 'error'); return; }
+            if (code === currentUserData.referralCode) { showToast("You can't use your own referral code.", 'error'); return; }
             const snapshot = await get(ref(db, `referralCodes/${code}`));
-            if(snapshot.exists()){
+            if (snapshot.exists()) {
                 const referrerId = snapshot.val().userId;
+                if (referrerId === currentUserData.uid) { showToast("You can't use your own referral code.", 'error'); return; }
                 try {
-                    await runTransaction(ref(db, `users/${currentUserData.uid}`), (d) => { if (d) { d.balance += 50; d.referredBy = referrerId; } return d; });
+                    await runTransaction(ref(db, `users/${currentUserData.uid}`), (d) => { if (d && !d.referredBy) { d.balance = (d.balance || 0) + 50; d.referredBy = referrerId; } return d; });
                     await runTransaction(ref(db, `users/${referrerId}`), (d) => { if (d) { d.balance = (d.balance || 0) + 25; } return d; });
-                    showToast('Success! You got a ৳50 bonus!'); e.target.reset();
-                } catch(error) { showToast(error.message, 'error'); }
-            } else { showToast('Invalid referral code.', 'error'); }
+                    showToast('Success! You received a ৳50 bonus!');
+                    e.target.reset();
+                } catch (error) { showToast(error.message, 'error'); }
+            } else { showToast('Invalid referral code. Please check and try again.', 'error'); }
         });
 
         document.getElementById('withdraw-form').addEventListener('submit', async e => {
             e.preventDefault();
-            if (!currentUserData.isVerified) { showToast('Please verify your account to withdraw.', 'error'); return; }
+            if (!currentUserData.isVerified) { showToast('Please verify your account to withdraw funds.', 'error'); return; }
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
-            if (amount < 100) { showToast('Minimum withdrawal is ৳100.', 'error'); return; }
-            if (amount > currentUserData.balance) { showToast('Insufficient balance.', 'error'); return; }
-            
+            if (amount < 100) { showToast('Minimum withdrawal amount is ৳100.', 'error'); return; }
+            if (amount > currentUserData.balance) { showToast('Insufficient balance for this withdrawal.', 'error'); return; }
             try {
-                await update(ref(db, `users/${currentUserData.uid}`), { balance: currentUserData.balance - amount });
-                await push(ref(db, 'withdrawalRequests'), { userId: currentUserData.uid, userName: currentUserData.name, amount, method: document.getElementById('withdraw-method').value, accountNumber: document.getElementById('withdraw-number').value, status: 'pending', timestamp: serverTimestamp() });
-                showToast('Withdrawal request submitted!');
-                bootstrap.Modal.getInstance(document.getElementById('withdrawModal')).hide(); e.target.reset();
+                const newBalance = currentUserData.balance - amount;
+                await update(ref(db, `users/${currentUserData.uid}`), { balance: newBalance });
+                await push(ref(db, 'withdrawalRequests'), { userId: currentUserData.uid, userName: currentUserData.name, amount: amount, method: document.getElementById('withdraw-method').value, accountNumber: document.getElementById('withdraw-number').value, status: 'pending', timestamp: serverTimestamp() });
+                showToast('Withdrawal request submitted successfully!');
+                e.target.reset();
             } catch (error) { showToast(error.message, 'error'); }
         });
     </script>
