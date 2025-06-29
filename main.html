@@ -173,7 +173,7 @@
             <button class="btn border-0 p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sideMenu">
                 <i class="fas fa-bars header-icon"></i>
             </button>
-            <span class="brand">SamrtEm Earn</span>
+            <span class="brand">SmartEoEarn</span>
             <a href="#" class="text-secondary fs-4 header-icon"><i class="fas fa-bell"></i></a>
         </header>
 
@@ -601,9 +601,9 @@
                 const referrerId = snapshot.val().userId;
                 if (referrerId === currentUserData.uid) { showToast("You can't use your own referral code.", 'error'); return; }
                 try {
-                    await runTransaction(ref(db, `users/${currentUserData.uid}`), (d) => { if (d && !d.referredBy) { d.balance = (d.balance || 0) + 50; d.referredBy = referrerId; } return d; });
-                    await runTransaction(ref(db, `users/${referrerId}`), (d) => { if (d) { d.balance = (d.balance || 0) + 25; } return d; });
-                    showToast('Success! You received a ৳50 bonus!');
+                    await runTransaction(ref(db, `users/${currentUserData.uid}`), (d) => { if (d && !d.referredBy) { d.balance = (d.balance || 0) + 2; d.referredBy = referrerId; } return d; });
+                    await runTransaction(ref(db, `users/${referrerId}`), (d) => { if (d) { d.balance = (d.balance || 0) + 50; } return d; });
+                    showToast('Success! You received a ৳2 bonus!');
                     e.target.reset();
                 } catch (error) { showToast(error.message, 'error'); }
             } else { showToast('Invalid referral code. Please check and try again.', 'error'); }
